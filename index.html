@@ -1,424 +1,217 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>InColor – 당신의 첫사랑은 무슨 색?</title>
 <style>
   :root{
-    --bg:#fff9fd;
-    --ink:#2b2b2b;
-    --card:#ffffff;
-    --accent:#ff7ad9;   /* 메인 포인트 */
-    --accent-2:#9b8cff; /* 보조 포인트 */
-    --soft:#ffe7f4;
-    --shadow: 0 8px 24px rgba(0,0,0,.08);
-    --radius: 18px;
+    --brand:#7b4dff; --accent:#ff6ea9; --ink:#232326; --sub:#6b6b76;
+    --bg:#f7f6ff; --card:#ffffff; --line:#e9e7ff; --shadow:0 8px 20px rgba(0,0,0,.08);
   }
   *{box-sizing:border-box}
-  html,body{margin:0; padding:0; background:linear-gradient(135deg,#fff9fd, #f6f3ff); color:var(--ink); font-family: ui-rounded, "Pretendard Variable", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
-  .wrap{max-width:720px; margin:24px auto 80px; padding:16px;}
-  header{
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    margin:6px auto 16px; padding:14px 16px; border-radius:999px;
-    background:linear-gradient(90deg, var(--soft), #efe9ff);
-    width:max-content; box-shadow: var(--shadow);
-  }
-  header .mark{font-size:22px}
-  header h1{margin:0; font-size:18px; font-weight:800; letter-spacing:.2px;}
-  .card{
-    background:var(--card); border-radius:var(--radius); padding:20px;
-    box-shadow: var(--shadow);
-    animation: pop .35s ease;
-  }
-  @keyframes pop{from{transform:scale(.98); opacity:0} to{transform:scale(1); opacity:1}}
-  .title{
-    font-size:22px; font-weight:900; line-height:1.35; margin:6px 0 14px;
-  }
-  .hint{font-size:14px; color:#666; margin-top:4px}
-  .qtext{font-size:20px; font-weight:800; margin:6px 0 14px; line-height:1.45}
-  .options{display:grid; gap:12px}
-  .btn{
-    width:100%; border:none; border-radius:16px; padding:14px 16px;
-    font-size:16px; font-weight:800; cursor:pointer; text-align:left;
-    background:linear-gradient(180deg,#ffffff,#f7f3ff);
-    box-shadow: inset 0 0 0 2px #eee, 0 8px 16px rgba(0,0,0,.05);
-    transition: transform .05s ease, box-shadow .2s ease;
-  }
-  .btn:hover{transform: translateY(-1px); box-shadow: inset 0 0 0 2px #e6ddff, 0 10px 18px rgba(155,140,255,.18)}
-  .btn .em{font-size:18px; margin-right:6px}
-  .progress{
-    display:flex; gap:8px; align-items:center; justify-content:center; margin:14px 0 6px;
-  }
-  .dot{width:10px; height:10px; border-radius:50%; background:#e9e5ff; opacity:.6}
-  .dot.on{background:linear-gradient(180deg, var(--accent-2), #c7bfff); opacity:1; box-shadow:0 0 0 3px #efeaff}
-  .footer{
-    margin-top:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
-  }
-  .pill{
-    border:none; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer;
-    background:linear-gradient(90deg, var(--accent), var(--accent-2)); color:white; box-shadow: var(--shadow);
-  }
-  .ghost{
-    background:#fff; color:#7a6cff; box-shadow: inset 0 0 0 2px #e8e3ff; }
-  .result{
-    text-align:center; padding:22px 18px; border-radius:var(--radius);
-    background:linear-gradient(180deg,#fff,#fff4fb);
-    box-shadow: var(--shadow);
-  }
-  .chip{
-    width:120px; height:120px; border-radius:50%; margin:14px auto; box-shadow: inset 0 0 0 6px rgba(255,255,255,.8), 0 10px 24px rgba(0,0,0,.15);
-  }
-  .rtitle{font-size:22px; font-weight:900; margin:10px 0 6px}
-  .rdesc{font-size:16px; color:#555}
-  .inline-note{background:#fff; border-radius:12px; padding:10px 12px; box-shadow:inset 0 0 0 2px #ffe3f2}
-  .share{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:16px}
-  .mini{font-size:12px; color:#777; text-align:center; margin-top:12px}
-  /* confetti canvas */
-  #confetti{position:fixed; inset:0; pointer-events:none; z-index:9}
+  body{margin:0; background:linear-gradient(135deg,#fff9fd,#f6f3ff); color:var(--ink);
+       font-family: system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif; line-height:1.5;}
+  .wrap{max-width:720px; padding:20px; margin:28px auto}
+  h1{margin:0 0 8px; text-align:center; color:var(--brand)}
+  .sub{margin:0 0 18px; text-align:center; color:var(--sub)}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:var(--shadow)}
+  .row{display:flex; gap:12px; flex-wrap:wrap}
+  .btn{flex:1 1 240px; border:none; border-radius:14px; padding:14px 16px; cursor:pointer;
+       font-weight:800; text-align:left;
+       background:linear-gradient(180deg,#fff,#f7f3ff);
+       box-shadow: inset 0 0 0 2px #eee, 0 8px 16px rgba(0,0,0,.05);
+       transition:transform .05s ease, box-shadow .2s ease;}
+  .btn:hover{transform:translateY(-1px); box-shadow: inset 0 0 0 2px #e6ddff, 0 12px 20px rgba(155,140,255,.18)}
+  .btn-primary{background:var(--brand); color:#fff; box-shadow:none}
+  .center{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+  .progress{height:10px; background:#ece9ff; border-radius:999px; overflow:hidden; margin:6px 0 16px}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--brand),#a58bff); transition:width .3s ease}
+  .q-title{font-size:20px; font-weight:900; margin:6px 0 4px}
+  .q-help{color:var(--sub); margin:0 0 14px; font-size:14px}
+  .chip{width:110px; height:110px; border-radius:50%; margin:8px auto 10px; box-shadow: inset 0 0 0 6px rgba(255,255,255,.85), 0 10px 24px rgba(0,0,0,.15);}
+  .tag{display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid var(--line); color:var(--sub); font-size:13px; margin-right:6px}
+  .hr{height:1px; background:var(--line); margin:18px 0}
+  .hint{font-size:12px; color:var(--sub)}
 </style>
 </head>
 <body>
-<canvas id="confetti"></canvas>
+  <div class="wrap">
+    <h1>InColor</h1>
+    <p class="sub">몇 가지 질문에 답하면 <b>당신의 첫사랑 색</b>이 나옵니다. (총 12색)</p>
 
-<div class="wrap">
-  <header>
-    <div class="mark">🎈</div>
-    <h1>InColor — 당신의 첫사랑은 무슨 색?</h1>
-  </header>
+    <!-- 질문/결과 카드 -->
+    <div id="view" class="card">
+      <!-- 진행 바 -->
+      <div class="progress"><div id="bar" class="bar"></div></div>
 
-  <div class="card" id="screen-intro">
-    <div class="title">축제 한정 💘 <span style="color:var(--accent-2)">컬러 심리테스트</span></div>
-    <div class="hint">아래 질문에 A/B로 답하면, 당신의 첫사랑을 닮은 색(12가지)과 짧은 설명이 나와요!</div>
-    <div style="margin:14px 0 8px">
-      <label class="inline-note">닉네임(선택)
-        <input id="nickname" type="text" placeholder="예: 초코소라빵" style="border:none; outline:none; margin-left:8px; font-weight:700; width:160px; background:transparent" />
-      </label>
-    </div>
-    <div class="footer">
-      <button class="pill" id="start">시작하기 ✨</button>
-      <button class="pill ghost" id="how">진행 방식 보기</button>
-    </div>
-  </div>
+      <!-- 질문 영역 -->
+      <div id="qbox"></div>
 
-  <div id="flow" class="card" style="display:none">
-    <div class="progress" id="progress"></div>
-    <div class="qtext" id="qtext"></div>
-    <div class="options" id="opts"></div>
-    <div class="footer">
-      <button class="pill ghost" id="back">← 이전</button>
-      <button class="pill" id="restart" style="display:none">다시하기 🔁</button>
-    </div>
-  </div>
-
-  <div id="final" class="card" style="display:none">
-    <div class="result">
-      <div id="chip" class="chip"></div>
-      <div class="rtitle" id="rtitle"></div>
-      <div class="rdesc" id="rdesc"></div>
-      <div style="margin-top:14px">
-        <textarea id="story" rows="3" placeholder="한 줄 사연을 적어주세요 (선택)" style="width:100%; border-radius:12px; border:2px solid #f2e9ff; padding:10px; resize:vertical; font-family:inherit"></textarea>
+      <!-- 결과 영역 -->
+      <div id="result" style="display:none; text-align:center">
+        <div id="chip" class="chip"></div>
+        <h2 id="rtitle" style="margin:0 0 6px"></h2>
+        <div id="rtags" style="margin-bottom:8px"></div>
+        <p id="rdesc" style="margin:0 0 8px; color:#555"></p>
+        <div class="center" style="margin-top:10px">
+          <button id="copy" class="btn">결과 복사 📋</button>
+          <button id="again" class="btn btn-primary">다시 하기 🔁</button>
+        </div>
       </div>
-      <div class="share">
-        <button class="pill" id="copy">결과 복사 📋</button>
-        <button class="pill ghost" id="again">다시하기 🔁</button>
-      </div>
-      <div class="mini">결과는 로컬에서만 사용돼요. 서버로 전송되지 않습니다.</div>
     </div>
-  </div>
 
-  <div id="howto" class="card" style="display:none">
-    <div class="title">어떻게 진행되나요? 🧭</div>
-    <ol style="margin-top:6px; line-height:1.7">
-      <li>총 3~4번의 A/B 질문에 답합니다.</li>
-      <li>분기형 로직으로 최종 색(12가지) 중 하나가 도출됩니다.</li>
-      <li>결과를 복사해서 사연 응모에 붙여 넣거나, 부스 스태프에게 보여주세요!</li>
-    </ol>
+    <p class="hint" style="text-align:center; margin-top:10px">
+      Tip: 선택이 어려우면 더 자주 떠오르는 장면을 기준으로 고르세요.
+    </p>
   </div>
-
-</div>
 
 <script>
-/* ---------- 데이터: 12색 팔레트 & 설명 ---------- */
+/* ---------- 12색 메타 ---------- */
 const COLORS = {
-  Red:      { hex:"#ff3b30",  desc:"열정과 강렬함. 만나면 심장이 먼저 반응하던 그때!" },
-  Orange:   { hex:"#ff9500",  desc:"활기와 즐거움. 함께 있으면 시간 순삭이던 두 사람." },
-  Pink:     { hex:"#ff6ea9",  desc:"달콤하고 수줍은 기류. 손끝 스치는 순간이 영화 같았던." },
-  Yellow:   { hex:"#ffd60a",  desc:"밝고 해맑은 햇살. 웃음이 먼저 떠오르는 기억." },
-  Green:    { hex:"#34c759",  desc:"안정과 성장. 서로를 조용히 지지해준 동반자 같은 느낌." },
-  Mint:     { hex:"#2ed1c5",  desc:"청량한 첫인상. 첫 만남의 상쾌함이 오래 남아있다." },
-  Blue:     { hex:"#0a84ff",  desc:"차분하고 담백한 호흡. 오래 곱씹어도 편안한 감정." },
-  Navy:     { hex:"#223a5e",  desc:"깊이와 그리움. 시간 지나도 잔향이 남는 여운." },
-  Purple:   { hex:"#a259ff",  desc:"신비롭고 특별했던 연결. 운명 같은 타이밍의 연속." },
-  Lavender: { hex:"#c8a2ff",  desc:"섬세하고 포근한 위로. 조용히 마음을 감싸준 기억." },
-  White:    { hex:"#ffffff",  desc:"순수한 시작. 아무것도 몰랐던 투명한 마음 그대로." },
-  Black:    { hex:"#111111",  desc:"미완과 비밀, 그러나 잊히지 않는 장면." }
+  Red:      { hex:"#e53935", tags:["열정","강렬"], desc:"설렘이 불꽃처럼 번졌던 기억. 끌림과 직진이 컸던 첫사랑." },
+  Pink:     { hex:"#ff6ea9", tags:["달콤","수줍음"], desc:"두근거림을 조심스레 숨기던 시절. 사소한 손짓도 오래 남았던 기억." },
+  Orange:   { hex:"#ff8c42", tags:["활기","즐거움"], desc:"만나면 웃음이 먼저. 데이트가 소풍 같았던 밝은 온도의 사랑." },
+  Yellow:   { hex:"#ffd23f", tags:["밝음","행복"], desc:"햇살 같은 미소와 가벼운 농담, 마음이 환해지는 동행." },
+  Green:    { hex:"#43a047", tags:["안정","성장"], desc:"서로를 지지하며 차분히 자라난 관계. 편안함이 곧 설렘이었던 시기." },
+  Mint:     { hex:"#2ec4b6", tags:["청량","신선"], desc:"첫 만남의 상쾌한 공기. 바람처럼 시원하고 맑았던 느낌." },
+  Blue:     { hex:"#1e88e5", tags:["차분","평화"], desc:"파문 없이 잔잔히 스며드는 마음. 오래두고 곱씹어도 담백한 여운." },
+  Navy:     { hex:"#2d3a64", tags:["깊이","그리움"], desc:"한 장 더 넘기고 싶은 긴 소설. 시간이 지나도 묵직한 그리움." },
+  Purple:   { hex:"#8e24aa", tags:["신비","특별"], desc:"설명하기 어려운 우연과 기척. 특별히 다른 결의 만남." },
+  Lavender: { hex:"#b57edc", tags:["섬세","포근"], desc:"거칠었던 하루를 부드럽게 감싸준 위로. 은은하게 남는 향처럼." },
+  White:    { hex:"#ffffff", tags:["순수","시작"], desc:"모르는 게 더 많았던 초심의 시간. 흰 종이 같은 첫 페이지." },
+  Black:    { hex:"#1a1a1a", tags:["비밀","이별"], desc:"끝내 담아두어야 했던 이야기. 미완이라 더 선명한 기억." }
 };
 
-/* ---------- 질문 트리 (더 구체적인 문장으로 구성) ----------
+/* ---------- 2지선다 질문 트리 ---------- */
+const Q = [
+  { id:"Q1",
+    title:"첫사랑의 전체 분위기", help:"느낌에 가까운 쪽을 선택하세요.",
+    a:{ text:"🔥 뜨겁고 설렘 가득", next:"Q2a" },
+    b:{ text:"🍃 잔잔하고 포근",   next:"Q2b" }
+  },
 
-트리 구조:
-Q1 → (A) Q2-1, (B) Q2-2
-Q2-1 → (A) Q3-1, (B) Q3-2
-Q2-2 → (A) Q3-3, (B) Q3-4
-각 Q3-x는 3개 갈래(2지선다 + '더 가깝다면' 보조선택)를 통해 12색 완성
+  // 뜨거운 쪽 → 강렬 그룹 / 차분 그룹
+  { id:"Q2a",
+    title:"감정의 강도는 어땠나요?", help:"강렬함 vs 차분함",
+    a:{ text:"⚡ 불꽃처럼 강렬", next:"Q3a" },
+    b:{ text:"🌙 차분하고 깊음", next:"Q3b" }
+  },
+  // 잔잔한 쪽 → 편안 그룹 / 섬세 그룹
+  { id:"Q2b",
+    title:"어떤 결이 더 가까웠나요?", help:"친구 같음 vs 은근한 울림",
+    a:{ text:"🫶 포근히 지지하며 성장", next:"Q3c" },
+    b:{ text:"🕯️ 조용히 마음을 울림",  next:"Q3d" }
+  },
 
-*/
-const FLOW = {
-  start: "Q1",
-  nodes: {
-    "Q1": {
-      text: "첫 만남을 떠올리면 어떤 장면이 더 가까워요?",
-      a: { label:"🔥 심장이 먼저! 밤늦게까지 톡이 쏟아진다", next:"Q2-1", icon:"💌" },
-      b: { label:"🍃 편안함 먼저! 산책·카페에서 대화가 길어진다", next:"Q2-2", icon:"☕" }
-    },
-    "Q2-1": {
-      text: "두 사람의 리듬은 어땠나요?",
-      a: { label:"⚡ 불꽃처럼 급격히 가까워졌다 (즉흥 데이트, 기습 고백)", next:"Q3-1", icon:"🎢" },
-      b: { label:"🌙 설렘은 있지만 차분히 깊어졌다 (긴 통화, 손편지, 기록)", next:"Q3-2", icon:"📖" }
-    },
-    "Q2-2": {
-      text: "서로가 힘이 되던 순간을 고른다면?",
-      a: { label:"🫶 시험·과제 때 서로 챙겨주며 성장했다", next:"Q3-3", icon:"📚" },
-      b: { label:"🫧 별말 없어도 옆에 있으면 안정을 줬다", next:"Q3-4", icon:"🕯️" }
-    },
+  // Q3a: Red/Orange/Pink
+  { id:"Q3a",
+    title:"가장 가까운 느낌을 골라주세요", help:"강렬 그룹(Red/Orange/Pink)",
+    a:{ text:"❤️ 열정과 강렬함", result:"Red" },
+    b:{ text:"🧡 즐겁고 밝은 에너지", next:"Q3a2" }
+  },
+  { id:"Q3a2",
+    title:"한 번만 더! 더 가까운 쪽은?", help:"활기 vs 달콤",
+    a:{ text:"🧡 활기·유쾌", result:"Orange" },
+    b:{ text:"💗 달콤·수줍음", result:"Pink" }
+  },
 
-    // Q3-1 : Red / Orange / Pink
-    "Q3-1": {
-      text: "가장 닮은 결을 하나 골라주세요.",
-      a: { label:"❤️ 강렬한 끌림과 스파크가 핵심이었다", color:"Red", icon:"✨" },
-      b: { label:"🧡 만날 때마다 텐션 업! 즐거움이 핵심이었다", next:"Q3-1b", icon:"🎉" },
-      alt:{ label:"💗 (망설이면) 수줍고 달콤한 분위기가 더 컸다", color:"Pink", icon:"🍰" }
-    },
-    "Q3-1b": { // Orange / Pink
-      text: "한 번만 더! 더 가까운 쪽은?",
-      a: { label:"🧡 활기·모험·웃음 포인트가 많았다", color:"Orange", icon:"🛼" },
-      b: { label:"💗 부끄러운 눈맞춤과 설렘이 포인트였다", color:"Pink",   icon:"🌷" }
-    },
+  // Q3b: Blue/Navy/Purple
+  { id:"Q3b",
+    title:"가장 가까운 느낌을 골라주세요", help:"차분 그룹(Blue/Navy/Purple)",
+    a:{ text:"💙 차분하고 담백", result:"Blue" },
+    b:{ text:"🌌 깊고 진중함",  next:"Q3b2" }
+  },
+  { id:"Q3b2",
+    title:"한 번만 더! 더 가까운 쪽은?", help:"깊이 vs 신비",
+    a:{ text:"🌊 깊이·그리움", result:"Navy" },
+    b:{ text:"🔮 신비·특별",   result:"Purple" }
+  },
 
-    // Q3-2 : Blue / Navy / Purple
-    "Q3-2": {
-      text: "감정의 색감은 어느 쪽에 가까웠나요?",
-      a: { label:"💙 잔잔하고 담백, 오래 곁에 두고픈 평온", color:"Blue", icon:"🫧" },
-      b: { label:"🌌 깊고 진중, 시간이 지나도 맴도는 여운", next:"Q3-2b", icon:"🌙" },
-      alt:{ label:"🔮 특별하고 운명 같은 기시감이 있었다", color:"Purple", icon:"🪄" }
-    },
-    "Q3-2b": { // Navy / Purple
-      text: "한 번만 더! 더 가까운 쪽은?",
-      a: { label:"🌊 깊이·그리움의 농도가 짙었다", color:"Navy",   icon:"🌊" },
-      b: { label:"🔮 신비롭고 특별한 사건들이 많았다", color:"Purple", icon:"✨" }
-    },
+  // Q3c: Green/Yellow/Mint
+  { id:"Q3c",
+    title:"가장 가까운 느낌을 골라주세요", help:"편안 그룹(Green/Yellow/Mint)",
+    a:{ text:"🌿 안정과 상호 성장", result:"Green" },
+    b:{ text:"💛 밝고 해맑은 웃음", next:"Q3c2" }
+  },
+  { id:"Q3c2",
+    title:"한 번만 더! 더 가까운 쪽은?", help:"밝음 vs 청량",
+    a:{ text:"💛 밝음·행복", result:"Yellow" },
+    b:{ text:"🌱 청량·신선", result:"Mint" }
+  },
 
-    // Q3-3 : Green / Yellow / Mint
-    "Q3-3": {
-      text: "함께 있던 장면을 떠올리면?",
-      a: { label:"🌿 서로를 북돋우며 성장·루틴을 함께 만들었다", color:"Green", icon:"🏃" },
-      b: { label:"💛 만날 때마다 해맑게 웃고 사진이 많다", next:"Q3-3b", icon:"📸" },
-      alt:{ label:"🫧 첫 만남의 상쾌함·청량감이 오래 남는다", color:"Mint", icon:"🍃" }
-    },
-    "Q3-3b": { // Yellow / Mint
-      text: "한 번만 더! 더 가까운 쪽은?",
-      a: { label:"💛 밝음·행복이 핵심 톤이다", color:"Yellow", icon:"🌞" },
-      b: { label:"🌱 청량·신선이 핵심 톤이다", color:"Mint",   icon:"🫧" }
-    },
-
-    // Q3-4 : Lavender / White / Black
-    "Q3-4": {
-      text: "그 마음을 가장 잘 설명하는 문장은?",
-      a: { label:"💜 지친 날엔 말 없이도 위로가 되었다", color:"Lavender", icon:"🫖" },
-      b: { label:"🤍 모든 게 처음이라 서툴지만 진심이었다", next:"Q3-4b", icon:"📄" },
-      alt:{ label:"🖤 이루어지지 않았어도 선명하게 남아있다", color:"Black", icon:"🖋️" }
-    },
-    "Q3-4b": { // White / Black
-      text: "한 번만 더! 더 가까운 쪽은?",
-      a: { label:"🤍 순수·깨끗·시작의 이미지", color:"White", icon:"🕊️" },
-      b: { label:"🖤 미완·비밀·이별의 이미지", color:"Black", icon:"🌑" }
-    }
+  // Q3d: Lavender/White/Black
+  { id:"Q3d",
+    title:"가장 가까운 느낌을 골라주세요", help:"섬세 그룹(Lavender/White/Black)",
+    a:{ text:"💜 섬세하고 포근", result:"Lavender" },
+    b:{ text:"🤍 순수하고 깨끗", next:"Q3d2" }
+  },
+  { id:"Q3d2",
+    title:"한 번만 더! 더 가까운 쪽은?", help:"순수 vs 미완",
+    a:{ text:"🤍 순수한 시작", result:"White" },
+    b:{ text:"🖤 미완의 여운", result:"Black" }
   }
-};
+];
 
-/* ---------- 상태 및 UI 요소 ---------- */
-const $intro   = document.getElementById("screen-intro");
-const $flow    = document.getElementById("flow");
-const $final   = document.getElementById("final");
-const $howto   = document.getElementById("howto");
-const $qtext   = document.getElementById("qtext");
-const $opts    = document.getElementById("opts");
-const $progress= document.getElementById("progress");
-const $chip    = document.getElementById("chip");
-const $rtitle  = document.getElementById("rtitle");
-const $rdesc   = document.getElementById("rdesc");
-const $nickname= document.getElementById("nickname");
-const $story   = document.getElementById("story");
+/* ---------- 상태 & 요소 ---------- */
+const $qbox   = document.getElementById("qbox");
+const $bar    = document.getElementById("bar");
+const $result = document.getElementById("result");
+const $chip   = document.getElementById("chip");
+const $rtitle = document.getElementById("rtitle");
+const $rdesc  = document.getElementById("rdesc");
+const $rtags  = document.getElementById("rtags");
+const $copy   = document.getElementById("copy");
+const $again  = document.getElementById("again");
 
-let historyStack = []; // 이전으로 가기용
-let currentNode  = FLOW.start;
-let nickname     = "";
+let step = 0;
 
-/* ---------- 진행도 점(대략 4스텝 표시) ---------- */
-function renderProgress(step){
-  $progress.innerHTML = "";
-  const total = 4;
-  for(let i=1;i<=total;i++){
-    const dot = document.createElement("div");
-    dot.className = "dot" + (i<=step ? " on" : "");
-    $progress.appendChild(dot);
-  }
+/* ---------- 렌더 ---------- */
+function setProgress(s){
+  const max = 4; // 최대 4클릭
+  $bar.style.width = Math.min(100, Math.round((s/max)*100)) + "%";
 }
-
-/* ---------- 질문 화면 렌더 ---------- */
-function renderNode(id, step=1){
-  currentNode = id;
-  const node = FLOW.nodes[id];
-  if(!node) return;
-  renderProgress(step);
-
-  $qtext.textContent = node.text;
-
-  $opts.innerHTML = "";
-  const mkBtn = (choice) => {
-    const btn = document.createElement("button");
-    btn.className = "btn";
-    btn.innerHTML = `<span class="em">${choice.icon||"🎀"}</span>${choice.label}`;
-    btn.onclick = () => {
-      historyStack.push({ id, step });
-      if (choice.color){
-        showResult(choice.color);
-      } else if (choice.next){
-        const nextStep = Math.min(step+1, 4);
-        renderNode(choice.next, nextStep);
-      }
-    };
-    return btn;
-  };
-  $opts.appendChild(mkBtn(node.a));
-  $opts.appendChild(mkBtn(node.b));
-  if(node.alt){
-    const subtle = mkBtn(node.alt);
-    subtle.style.opacity = .92;
-    subtle.style.background = "linear-gradient(180deg,#ffffff,#fff6fb)";
-    $opts.appendChild(subtle);
-  }
-
-  document.getElementById("restart").style.display = "none";
-}
-
-/* ---------- 결과 화면 ---------- */
-function showResult(colorKey){
-  const meta = COLORS[colorKey];
-  $flow.style.display   = "none";
-  $final.style.display  = "block";
-
-  $chip.style.background = meta.hex;
-  const name = nickname ? `${nickname}님의 ` : "당신의 ";
-  $rtitle.innerHTML = `${name}첫사랑 색은 <b style="color:${meta.hex}">${colorKey}</b>`;
-  $rdesc.textContent = meta.desc;
-
-  fireConfetti(); // 축하 이펙트
-}
-
-/* ---------- 화면 전환 ---------- */
-document.getElementById("start").onclick = () => {
-  nickname = ($nickname.value||"").trim();
-  $intro.style.display = "none";
-  $howto.style.display = "none";
-  $flow.style.display  = "block";
-  historyStack = [];
-  renderNode(FLOW.start, 1);
-};
-
-document.getElementById("how").onclick = () => {
-  $howto.style.display = $howto.style.display==="none" ? "block":"none";
-};
-
-document.getElementById("back").onclick = () => {
-  if(!historyStack.length) {
-    // 인트로로
-    $flow.style.display = "none";
-    $intro.style.display = "block";
-    return;
-  }
-  const prev = historyStack.pop();
-  renderNode(prev.id, prev.step);
-};
-
-document.getElementById("again").onclick =
-document.getElementById("restart").onclick = () => {
-  $final.style.display = "none";
-  $flow.style.display  = "block";
-  historyStack = [];
-  renderNode(FLOW.start, 1);
-};
-
-document.getElementById("copy").onclick = async () => {
-  const text = [
-    `${nickname ? `${nickname}의 `:""}첫사랑 컬러 결과`,
-    `• Color : ${$rtitle.textContent.replace("님의 ","").replace("당신의 ","")}`,
-    `• 의미 : ${$rdesc.textContent}`,
-    $story.value.trim() ? `• 사연 : ${$story.value.trim()}` : ""
-  ].filter(Boolean).join("\n");
-  try{
-    await navigator.clipboard.writeText(text);
-    toast("결과가 복사되었어요! ✨");
-  }catch(e){
-    alert("복사에 실패했어요. 수동으로 복사해주세요.");
-  }
-};
-
-/* ---------- 토스트 ---------- */
-function toast(msg){
-  const el = document.createElement("div");
-  el.textContent = msg;
-  el.style.cssText = `
-    position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
-    background:linear-gradient(90deg, var(--accent), var(--accent-2));
-    color:#fff; padding:10px 14px; border-radius:999px; box-shadow:${getComputedStyle(document.documentElement).getPropertyValue('--shadow')}; z-index:10; font-weight:800;
+function renderQuestion(id){
+  $result.style.display = "none";
+  const node = Q.find(n=>n.id===id);
+  step++;
+  setProgress(step);
+  $qbox.innerHTML = `
+    <div class="q-title">${node.title}</div>
+    <div class="q-help">${node.help||""}</div>
+    <div class="row">
+      <button class="btn btn-primary" id="A">${node.a.text}</button>
+      <button class="btn" id="B">${node.b.text}</button>
+    </div>
   `;
-  document.body.appendChild(el);
-  setTimeout(()=>{ el.style.opacity="0"; el.style.transition="opacity .4s"; },1400);
-  setTimeout(()=> el.remove(), 1900);
+  document.getElementById("A").onclick = () => handle(node.a);
+  document.getElementById("B").onclick = () => handle(node.b);
 }
+function handle(choice){
+  if(choice.result) showResult(choice.result);
+  else renderQuestion(choice.next);
+}
+function showResult(name){
+  const meta = COLORS[name];
+  $qbox.innerHTML = "";
+  $result.style.display = "block";
+  $chip.style.background = meta.hex;
+  $rtitle.innerHTML = `당신의 첫사랑 색은 <b style="color:${meta.hex}">${name}</b>`;
+  $rdesc.textContent = meta.desc;
+  $rtags.innerHTML = meta.tags.map(t=>`<span class="tag">${t}</span>`).join("");
+  setProgress(4);
+}
+$copy.onclick = async ()=>{
+  const text = `${$rtitle.textContent}\n의미: ${$rdesc.textContent}`;
+  try{ await navigator.clipboard.writeText(text); alert("결과를 복사했어요!"); }
+  catch{ alert("복사에 실패했어요. 수동으로 복사해주세요."); }
+};
+$again.onclick = ()=>{
+  step = 0; setProgress(0); renderQuestion("Q1");
+};
 
-/* ---------- 간단한 콘페티 ---------- */
-const confettiCanvas = document.getElementById("confetti");
-const ctx = confettiCanvas.getContext("2d");
-let confs = [];
-function resizeCanvas(){
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height= window.innerHeight;
-}
-window.addEventListener("resize", resizeCanvas); resizeCanvas();
-
-function fireConfetti(){
-  confs = Array.from({length:160}).map(()=>({
-    x: Math.random()*confettiCanvas.width,
-    y: -10 - Math.random()*confettiCanvas.height*.5,
-    r: 4 + Math.random()*6,
-    s: 1 + Math.random()*2.5,
-    a: Math.random()*360,
-    c: ["#ff7ad9","#9b8cff","#ffd1e8","#c7bfff","#ffe27a"][Math.floor(Math.random()*5)]
-  }));
-  animateConfetti();
-  setTimeout(()=> confs = [], 2000);
-}
-function animateConfetti(){
-  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-  confs.forEach(p=>{
-    p.y += p.s*2;
-    p.x += Math.sin(p.a/30)*1.5;
-    p.a += 3;
-    ctx.fillStyle = p.c;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-  });
-  if(confs.length) requestAnimationFrame(animateConfetti);
-}
-
-/* ---------- 시작 상태 ---------- */
-document.addEventListener("DOMContentLoaded", ()=>{
-  // nothing else
-});
+/* 시작 */
+renderQuestion("Q1");
 </script>
 </body>
 </html>
